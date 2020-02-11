@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <vitasdk/utils.h>
+#include <dolcesdk/utils.h>
 #include <psp2/kernel/threadmgr.h>
 
 // not in sdk
@@ -60,7 +60,7 @@ int __vita_delete_thread_reent(int thid)
 	return 1;
 }
 
-int vitasdk_delete_thread_reent(int thid)
+int dolcesdk_delete_thread_reent(int thid)
 {
 	int res = 0;
 	// Lock the list because we'll be modifying it
@@ -168,7 +168,7 @@ struct _reent *__getreent_for_thread(int thid) {
 
 		if (!free_reent) {
 			// we've exhausted all our resources
-			sceClibPrintf("[VITASDK] FATAL: Exhausted all thread reent resources!");
+			sceClibPrintf("[DOLCESDK] FATAL: Exhausted all thread reent resources!");
 			__builtin_trap();
 		}
 	} else {
@@ -200,7 +200,7 @@ struct _reent *__getreent(void) {
 	return  __getreent_for_thread(0);
 }
 
-void *vitasdk_get_tls_data(SceUID thid)
+void *dolcesdk_get_tls_data(SceUID thid)
 {
 	struct reent_for_thread *for_thread;
 	struct _reent *reent = __getreent_for_thread(thid);
@@ -209,7 +209,7 @@ void *vitasdk_get_tls_data(SceUID thid)
 	return &for_thread->tls_data_ext;
 }
 
-void *vitasdk_get_pthread_data(SceUID thid)
+void *dolcesdk_get_pthread_data(SceUID thid)
 {
 	struct reent_for_thread *for_thread;
 	struct _reent *reent = __getreent_for_thread(thid);

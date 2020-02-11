@@ -401,7 +401,7 @@ case "${host}" in
   arc-*-*)
 	sys_dir=arc
 	;;
-  arm*vita*)
+  arm*dolce*)
 	sys_dir=vita
 	;;
   arm*-*-*)
@@ -620,7 +620,7 @@ case "${host}" in
   arc-*-*)
 	syscall_dir=syscalls
 	;;
-  arm*vita*)
+  arm*dolce*)
 	syscall_dir=syscalls
 	newlib_cflags="${newlib_cflags} -D__DYNAMIC_REENT__ -DREENTRANT_SYSCALLS_PROVIDED"
 	;;

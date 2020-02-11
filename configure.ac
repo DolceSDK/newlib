@@ -832,7 +832,7 @@ case "${target}" in
   alpha*-dec-osf*)
     noconfigdirs="$noconfigdirs target-newlib target-libgloss"
     ;;
-  arm*vita*)
+  arm*dolce*)
     noconfigdirs="$noconfigdirs target-libgloss"
     ;;
   i[[3456789]]86-*-linux*)
