@@ -254,44 +254,44 @@ include $(srcdir)/../../Makefile.shared
 if NEWLIB_NANO_FORMATTED_IO
 # Rules compiling small-footprint nano-formatted-io implementation.
 $(lpfx)nano-vfprintf.$(oext): nano-vfprintf.c
-	$(LIB_COMPILE) -fshort-enums -c $(srcdir)/nano-vfprintf.c -o $@
+	$(LIB_COMPILE) -c $(srcdir)/nano-vfprintf.c -o $@
 
 $(lpfx)nano-vfprintf_i.$(oext): nano-vfprintf_i.c
-	$(LIB_COMPILE) -fshort-enums -c $(srcdir)/nano-vfprintf_i.c -o $@
+	$(LIB_COMPILE) -c $(srcdir)/nano-vfprintf_i.c -o $@
 
 $(lpfx)nano-vfprintf_float.$(oext): nano-vfprintf_float.c
-	$(LIB_COMPILE) -fshort-enums -c $(srcdir)/nano-vfprintf_float.c -o $@
+	$(LIB_COMPILE) -c $(srcdir)/nano-vfprintf_float.c -o $@
 
 $(lpfx)nano-svfprintf.$(oext): nano-vfprintf.c
-	$(LIB_COMPILE) -fshort-enums -DSTRING_ONLY -c $(srcdir)/nano-vfprintf.c -o $@
+	$(LIB_COMPILE) -DSTRING_ONLY -c $(srcdir)/nano-vfprintf.c -o $@
 endif
 
 # This rule is needed so that libtool compiles vfiprintf before vfprintf.
 # Otherwise libtool moves vfprintf.o and subsequently can't find it.
 
 $(lpfx)vfprintf.$(oext): vfprintf.c
-	$(LIB_COMPILE) -fshort-enums -c $(srcdir)/vfprintf.c -o $@
+	$(LIB_COMPILE) -c $(srcdir)/vfprintf.c -o $@
 
 $(lpfx)vfiprintf.$(oext): vfprintf.c
-	$(LIB_COMPILE) -fshort-enums -DINTEGER_ONLY -c $(srcdir)/vfprintf.c -o $@
+	$(LIB_COMPILE) -DINTEGER_ONLY -c $(srcdir)/vfprintf.c -o $@
 
 $(lpfx)svfprintf.$(oext): vfprintf.c
-	$(LIB_COMPILE) -fshort-enums -DSTRING_ONLY -c $(srcdir)/vfprintf.c -o $@
+	$(LIB_COMPILE) -DSTRING_ONLY -c $(srcdir)/vfprintf.c -o $@
 
 $(lpfx)svfiprintf.$(oext): vfprintf.c
-	$(LIB_COMPILE) -fshort-enums -DINTEGER_ONLY -DSTRING_ONLY -c $(srcdir)/vfprintf.c -o $@
+	$(LIB_COMPILE) -DINTEGER_ONLY -DSTRING_ONLY -c $(srcdir)/vfprintf.c -o $@
 
 $(lpfx)vfwprintf.$(oext): vfwprintf.c
-	$(LIB_COMPILE) -fshort-enums -c $(srcdir)/vfwprintf.c -o $@
+	$(LIB_COMPILE) -c $(srcdir)/vfwprintf.c -o $@
 
 $(lpfx)vfiwprintf.$(oext): vfwprintf.c
-	$(LIB_COMPILE) -fshort-enums -DINTEGER_ONLY -c $(srcdir)/vfwprintf.c -o $@
+	$(LIB_COMPILE) -DINTEGER_ONLY -c $(srcdir)/vfwprintf.c -o $@
 
 $(lpfx)svfwprintf.$(oext): vfwprintf.c
-	$(LIB_COMPILE) -fshort-enums -DSTRING_ONLY -c $(srcdir)/vfwprintf.c -o $@
+	$(LIB_COMPILE) -DSTRING_ONLY -c $(srcdir)/vfwprintf.c -o $@
 
 $(lpfx)svfiwprintf.$(oext): vfwprintf.c
-	$(LIB_COMPILE) -fshort-enums -DINTEGER_ONLY -DSTRING_ONLY -c $(srcdir)/vfwprintf.c -o $@
+	$(LIB_COMPILE) -DINTEGER_ONLY -DSTRING_ONLY -c $(srcdir)/vfwprintf.c -o $@
 
 if NEWLIB_NANO_FORMATTED_IO
 # Rules compiling small-footprint nano-formatted-io implementation.
