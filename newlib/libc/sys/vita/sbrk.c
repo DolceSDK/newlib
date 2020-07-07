@@ -1,6 +1,9 @@
 #include <errno.h>
 #include <reent.h>
 
+#include <psp2/kernel/sysmem.h>
+#include <psp2/kernel/threadmgr.h>
+
 extern unsigned int _newlib_heap_size_user __attribute__((weak));
 
 static int _newlib_heap_memblock;

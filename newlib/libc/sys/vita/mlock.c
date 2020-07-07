@@ -1,3 +1,5 @@
+#include <psp2/kernel/threadmgr.h>
+
 static char _newlib_malloc_mutex[32] __attribute__ ((aligned (8)));
 
 void __malloc_lock(struct _reent *r) {
