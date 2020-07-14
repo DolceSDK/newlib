@@ -1,4 +1,5 @@
 #include <fcntl.h>
+#include <sys/reent.h>
 #include <sys/unistd.h>
 #include <errno.h>
 #include <string.h>
@@ -8,6 +9,12 @@
 
 #include "vitadescriptor.h"
 #include "vitaglue.h"
+
+#define CHECK_STD_INIT(ptr) do { \
+	struct _reent *_check_init_ptr = (ptr); \
+	if (_check_init_ptr && !_check_init_ptr->__sdidinit) \
+		__sinit(_check_init_ptr); \
+} while (0)
 
 #define SCE_ERRNO_MASK 0xFF
 
@@ -52,6 +59,8 @@ void _init_vita_io(void) {
 	}
 
 	sceKernelUnlockLwMutex(&_newlib_fd_mutex, 1);
+
+	CHECK_STD_INIT(_GLOBAL_REENT);
 }
 
 void _free_vita_io(void) {
