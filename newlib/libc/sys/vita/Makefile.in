@@ -82,8 +82,7 @@ am_lib_a_OBJECTS = lib_a-syscalls.$(OBJEXT) lib_a-sbrk.$(OBJEXT) \
 	lib_a-io.$(OBJEXT) lib_a-socket.$(OBJEXT) lib_a-dup.$(OBJEXT) \
 	lib_a-select.$(OBJEXT) lib_a-error.$(OBJEXT) \
 	lib_a-dirent.$(OBJEXT) lib_a-lcltime_r.$(OBJEXT) \
-	lib_a-sleep.$(OBJEXT) lib_a-usleep.$(OBJEXT) \
-	$(am__objects_1)
+	lib_a-sleep.$(OBJEXT) lib_a-usleep.$(OBJEXT) $(am__objects_1)
 lib_a_OBJECTS = $(am_lib_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp =
@@ -194,6 +193,7 @@ pdfdir = @pdfdir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
+runstatedir = @runstatedir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
