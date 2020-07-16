@@ -27,6 +27,7 @@ SOFTWARE.
 #include <sys/unistd.h>
 #include <errno.h>
 #include <string.h>
+#include <stddef.h>
 
 #include <psp2/io/fcntl.h>
 #include <psp2/kernel/threadmgr.h>
@@ -45,11 +46,16 @@ SOFTWARE.
 DescriptorTranslation *__vita_fdmap[MAX_OPEN_FILES];
 DescriptorTranslation __vita_fdmap_pool[MAX_OPEN_FILES];
 
-SceKernelLwMutexWork _newlib_fd_mutex __attribute__ ((aligned (8)));
+SceKernelLwMutexWork _newlib_fd_mutex;
 
 void _init_vita_io(void) {
 	int ret;
-	sceKernelCreateLwMutex(&_newlib_fd_mutex, "fd conversion table mutex", SCE_KERNEL_MUTEX_ATTR_RECURSIVE, 1, NULL);
+	sceKernelCreateLwMutex(
+		&_newlib_fd_mutex,
+		"fd conversion table mutex",
+		SCE_KERNEL_LW_MUTEX_ATTR_TH_FIFO | SCE_KERNEL_LW_MUTEX_ATTR_RECURSIVE,
+		1,
+		NULL);
 
 	memset(__vita_fdmap, 0, sizeof(__vita_fdmap));
 	memset(__vita_fdmap_pool, 0, sizeof(__vita_fdmap_pool));
@@ -88,7 +94,7 @@ void _init_vita_io(void) {
 }
 
 void _free_vita_io(void) {
-	sceKernelLockLwMutex(&_newlib_fd_mutex, 1, 0);
+	sceKernelLockLwMutex(&_newlib_fd_mutex, 1, NULL);
 
 	if (__vita_fdmap[STDIN_FILENO]) {
 		sceIoClose(__vita_fdmap[STDIN_FILENO]->sce_uid);
@@ -114,7 +120,7 @@ int __vita_acquire_descriptor(void)
 {
 	int fd = -1;
 	int i = 0;
-	sceKernelLockLwMutex(&_newlib_fd_mutex, 1, 0);
+	sceKernelLockLwMutex(&_newlib_fd_mutex, 1, NULL);
 
 	// get free descriptor
 	// only allocate descriptors after stdin/stdout/stderr -> aka 0/1/2
@@ -146,7 +152,7 @@ int __vita_release_descriptor(int fd)
 	DescriptorTranslation *map = NULL;
 	int res = -1;
 
-	sceKernelLockLwMutex(&_newlib_fd_mutex, 1, 0);
+	sceKernelLockLwMutex(&_newlib_fd_mutex, 1, NULL);
 
 	if (is_fd_valid(fd) && __vita_fd_drop(__vita_fdmap[fd]) >= 0)
 	{
@@ -162,7 +168,7 @@ int __vita_duplicate_descriptor(int fd)
 {
 	int fd2 = -1;
 
-	sceKernelLockLwMutex(&_newlib_fd_mutex, 1, 0);
+	sceKernelLockLwMutex(&_newlib_fd_mutex, 1, NULL);
 
 	if (is_fd_valid(fd))
 	{
@@ -187,7 +193,7 @@ int __vita_duplicate_descriptor(int fd)
 int __vita_descriptor_ref_count(int fd)
 {
 	int res = 0;
-	sceKernelLockLwMutex(&_newlib_fd_mutex, 1, 0);
+	sceKernelLockLwMutex(&_newlib_fd_mutex, 1, NULL);
 	res = __vita_fdmap[fd]->ref_count;
 	sceKernelUnlockLwMutex(&_newlib_fd_mutex, 1);
 	return res;
@@ -197,7 +203,7 @@ DescriptorTranslation *__vita_fd_grab(int fd)
 {
 	DescriptorTranslation *map = NULL;
 
-	sceKernelLockLwMutex(&_newlib_fd_mutex, 1, 0);
+	sceKernelLockLwMutex(&_newlib_fd_mutex, 1, NULL);
 
 	if (is_fd_valid(fd))
 	{
@@ -213,7 +219,7 @@ DescriptorTranslation *__vita_fd_grab(int fd)
 
 int __vita_fd_drop(DescriptorTranslation *map)
 {
-	sceKernelLockLwMutex(&_newlib_fd_mutex, 1, 0);
+	sceKernelLockLwMutex(&_newlib_fd_mutex, 1, NULL);
 
 	if (map->ref_count == 1)
 	{

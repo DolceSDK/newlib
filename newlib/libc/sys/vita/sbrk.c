@@ -35,13 +35,13 @@ extern unsigned int _newlib_heap_size_user __attribute__((weak));
 static int _newlib_heap_memblock;
 static unsigned _newlib_heap_size;
 static char *_newlib_heap_base, *_newlib_heap_end, *_newlib_heap_cur;
-static char _newlib_sbrk_mutex[32] __attribute__ ((aligned (8)));
+static SceKernelLwMutexWork _newlib_sbrk_mutex;
 
 void * _sbrk_r(struct _reent *reent, ptrdiff_t incr) {
-	if (sceKernelLockLwMutex(_newlib_sbrk_mutex, 1, 0) < 0)
+	if (sceKernelLockLwMutex(&_newlib_sbrk_mutex, 1, NULL) < 0)
 		goto fail;
 	if (!_newlib_heap_base || _newlib_heap_cur + incr >= _newlib_heap_end) {
-		sceKernelUnlockLwMutex(_newlib_sbrk_mutex, 1);
+		sceKernelUnlockLwMutex(&_newlib_sbrk_mutex, 1);
 fail:
 		reent->_errno = ENOMEM;
 		return -1;
@@ -50,22 +50,31 @@ fail:
 	char *prev_heap_end = _newlib_heap_cur;
 	_newlib_heap_cur += incr;
 
-	sceKernelUnlockLwMutex(_newlib_sbrk_mutex, 1);
+	sceKernelUnlockLwMutex(&_newlib_sbrk_mutex, 1);
 	return (void*) prev_heap_end;
 }
 
 void _init_vita_heap(void) {
 	// Create a mutex to use inside _sbrk_r
-	if (sceKernelCreateLwMutex(_newlib_sbrk_mutex, "sbrk mutex", 0, 0, 0) < 0) {
+	if (sceKernelCreateLwMutex(
+			&_newlib_sbrk_mutex,
+			"sbrk mutex",
+			SCE_KERNEL_LW_MUTEX_ATTR_TH_FIFO,
+			0,
+			NULL) < 0) {
 		goto failure;
 	}
 	if (&_newlib_heap_size_user != NULL) {
 		_newlib_heap_size = _newlib_heap_size_user;
 	} else {
-		// Create a memblock for the heap memory, 32MB
-		_newlib_heap_size = 32 * 1024 * 1024;
+		// Create a memblock for the heap memory, 32MiB
+		_newlib_heap_size = SCE_KERNEL_32MiB;
 	}
-	_newlib_heap_memblock = sceKernelAllocMemBlock("Newlib heap", 0x0c20d060, _newlib_heap_size, 0);
+	_newlib_heap_memblock = sceKernelAllocMemBlock(
+		"Newlib heap",
+		SCE_KERNEL_MEMBLOCK_TYPE_USER_RW,
+		_newlib_heap_size,
+		NULL);
 	if (_newlib_heap_memblock < 0) {
 		goto failure;
 	}
@@ -84,7 +93,7 @@ failure:
 
 void _free_vita_heap(void) {
 	// Destroy the sbrk mutex
-	sceKernelDeleteLwMutex(_newlib_sbrk_mutex);
+	sceKernelDeleteLwMutex(&_newlib_sbrk_mutex);
 
 	// Free the heap memblock to avoid memory leakage.
 	sceKernelFreeMemBlock(_newlib_heap_memblock);

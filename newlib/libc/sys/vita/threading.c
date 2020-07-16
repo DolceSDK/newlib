@@ -1,3 +1,29 @@
+/*
+Copyright (C) 2015 xyzz
+Copyright (C) 2016 Davee
+Copyright (C) 2016 Sergi Granell
+Copyright (C) 2017 frangarcj
+Copyright (C) 2020 Asakura Reiko
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 // This provides support for __getreent() as well as implementation of our thread-related wrappers
 
 #include <reent.h>
@@ -37,7 +63,7 @@ int __vita_delete_thread_reent(int thid)
 	// We only need to cleanup if reent is allocated, i.e. if it's on our TLS
 	// We also don't need to clean up the global reent
 	struct _reent **on_tls = NULL;
-	
+
 	if (thid == 0)
 		on_tls = TLS_REENT_PTR;
 	else
@@ -144,17 +170,17 @@ struct _reent *__getreent_for_thread(int thid) {
 
 	// A pointer to our reent should be on the TLS
 	struct _reent **on_tls = NULL;
-	
+
 	if (thid == 0)
 		on_tls = TLS_REENT_PTR;
 	else
-		on_tls = TLS_REENT_THID_PTR(thid);	
-	
+		on_tls = TLS_REENT_THID_PTR(thid);
+
 	if (*on_tls) {
 		return *on_tls;
 	}
-  
-  	sceKernelLockMutex(_newlib_reent_mutex, 1, 0);
+
+	sceKernelLockMutex(_newlib_reent_mutex, 1, NULL);
 
 	// If it's not on the TLS this means the thread doesn't have a reent allocated yet
 	// We allocate one and put a pointer to it on the TLS
@@ -221,7 +247,11 @@ void *dolcesdk_get_pthread_data(SceUID thid)
 // Called from _start to set up the main thread reentrancy structure
 void _init_vita_reent(void) {
 	memset(reent_list, 0, sizeof(reent_list));
-	_newlib_reent_mutex = sceKernelCreateMutex("reent list access mutex", 0, 0, 0);
+	_newlib_reent_mutex = sceKernelCreateMutex(
+		"reent list access mutex",
+		SCE_KERNEL_MUTEX_ATTR_TH_FIFO,
+		0,
+		NULL);
 	reent_list[0].thread_id = sceKernelGetThreadId();
 	_REENT_INIT_PTR(&reent_list[0].reent);
 	*(struct _reent **)(TLS_REENT_PTR) = &reent_list[0].reent;

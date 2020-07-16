@@ -22,22 +22,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#include <stddef.h>
 #include <psp2/kernel/threadmgr.h>
 
-static char _newlib_malloc_mutex[32] __attribute__ ((aligned (8)));
+static SceKernelLwMutexWork _newlib_malloc_mutex;
 
 void __malloc_lock(struct _reent *r) {
-	sceKernelLockLwMutex(_newlib_malloc_mutex, 1, 0);
+	sceKernelLockLwMutex(&_newlib_malloc_mutex, 1, NULL);
 }
 
 void __malloc_unlock(struct _reent *r) {
-	sceKernelUnlockLwMutex(_newlib_malloc_mutex, 1);
+	sceKernelUnlockLwMutex(&_newlib_malloc_mutex, 1);
 }
 
 void _init_vita_malloc(void) {
-	sceKernelCreateLwMutex(_newlib_malloc_mutex, "malloc mutex", 2, 0, 0);
+	sceKernelCreateLwMutex(
+		&_newlib_malloc_mutex,
+		"malloc mutex",
+		SCE_KERNEL_LW_MUTEX_ATTR_TH_FIFO | SCE_KERNEL_LW_MUTEX_ATTR_RECURSIVE,
+		0,
+		NULL);
 }
 
 void _free_vita_malloc(void) {
-	sceKernelDeleteLwMutex(_newlib_malloc_mutex);
+	sceKernelDeleteLwMutex(&_newlib_malloc_mutex);
 }
