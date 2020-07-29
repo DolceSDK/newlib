@@ -1,3 +1,32 @@
+/*
+Copyright (C) 2015, 2016 xyzz
+Copyright (C) 2015 Glenn Anderson
+Copyright (C) 2015, 2016 endrift
+Copyright (C) 2016 Yifan Lu
+Copyright (C) 2016 Davee
+Copyright (C) 2018 yne
+Copyright (C) 2018 d3m3vilurr
+Copyright (C) 2020 Asakura Reiko
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 #include <errno.h>
 #include <fcntl.h>
 #include <reent.h>
@@ -85,9 +114,6 @@ _close_r(struct _reent *reent, int fd)
 	reent->_errno = 0;
 	return 0;
 }
-
-char *__env[1] = { 0 };
-char **environ = __env;
 
 int
 _execve_r(struct _reent *reent, const char *name, char * const *argv,
@@ -408,7 +434,7 @@ _ftruncate_r(struct _reent *reent, int fd, off_t length)
 	struct SceIoStat stat = {0};
 	stat.st_size = length;
 	int ret;
-	
+
 	DescriptorTranslation *fdmap = __vita_fd_grab(fd);
 
 	if (!fdmap) {
