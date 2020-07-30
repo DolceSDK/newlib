@@ -1,3 +1,34 @@
+/*
+Copyright (C) 2015 xyzz
+Copyright (C) 2015 Glenn Anderson
+Copyright (C) 2016 xerpi
+Copyright (C) 2016 Yifan Lu
+Copyright (C) 2016 frangarcj
+Copyright (C) 2018 yne
+Copyright (C) 2020 Asakura Reiko
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+#include <stddef.h>
+#include <stdlib.h>
+
 /* The maximum number of arguments that can be passed to main(). */
 #define ARGC_MAX 19
 
@@ -17,9 +48,9 @@ void _free_vita_newlib(void) {
 	_free_vita_heap();
 }
 
-/* 
- * Code below is based on the PSPSDK implementation  
- * Copyright (c) 2005 Marcus R. Brown <mrbrown@ocgnet.org> 
+/*
+ * Code below is based on the PSPSDK implementation
+ * Copyright (c) 2005 Marcus R. Brown <mrbrown@ocgnet.org>
  */
 
 void _start(unsigned int args, void *argp)
@@ -40,9 +71,11 @@ void _start(unsigned int args, void *argp)
 			break;
 		}
 	}
+	argv[argc] = NULL;
 
-	argv[argc] = 0;
 	_init_vita_newlib();
 	__libc_init_array();
+	setenv("HOME", "app0:", 1);
+
 	exit(main(argc, argv));
 }
