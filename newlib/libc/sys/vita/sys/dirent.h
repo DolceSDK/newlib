@@ -28,7 +28,7 @@ DEALINGS IN THE SOFTWARE.
 #include <sys/types.h>
 #include <sys/time.h>
 
-#include <psp2/io/dirent.h>
+#include <psp2/kernel/iofilemgr.h>
 
 struct dirent
 {

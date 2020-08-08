@@ -37,12 +37,9 @@ SOFTWARE.
 #include <sys/times.h>
 #include <sys/unistd.h>
 
-#include <psp2/io/fcntl.h>
-#include <psp2/io/dirent.h>
-#include <psp2/io/stat.h>
-#include <psp2/rtc.h>
-
+#include <psp2/kernel/iofilemgr.h>
 #include <psp2/kernel/processmgr.h>
+#include <psp2/rtc.h>
 
 #include <string.h>
 
@@ -351,9 +348,9 @@ static void
 scestat_to_stat(struct SceIoStat *in, struct stat *out) {
 	memset(out, 0, sizeof(*out));
 	out->st_size = in->st_size;
-	if (SCE_S_ISREG(in->st_mode))
+	if (SCE_STM_ISREG(in->st_mode))
 		out->st_mode |= _IFREG;
-	if (SCE_S_ISDIR(in->st_mode))
+	if (SCE_STM_ISDIR(in->st_mode))
 		out->st_mode |= _IFDIR;
 	sceRtcGetTime_t(&in->st_atime, &out->st_atime);
 	sceRtcGetTime_t(&in->st_mtime, &out->st_mtime);

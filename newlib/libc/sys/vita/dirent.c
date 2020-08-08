@@ -28,7 +28,7 @@ DEALINGS IN THE SOFTWARE.
 #include <string.h>
 
 #include <psp2/types.h>
-#include <psp2/io/dirent.h>
+#include <psp2/kernel/iofilemgr.h>
 #include <psp2/kernel/threadmgr.h>
 
 #define SCE_ERRNO_MASK 0xFF
