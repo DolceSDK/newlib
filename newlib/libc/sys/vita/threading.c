@@ -32,9 +32,7 @@ SOFTWARE.
 
 #include <dolcesdk/utils.h>
 #include <psp2/kernel/threadmgr.h>
-
-// not in sdk
-void sceClibPrintf(const char *fmt, ...);
+#include <psp2/kernel/clib.h>
 
 #define MAX_THREADS 256
 
