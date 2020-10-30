@@ -29,15 +29,15 @@
 #ifndef _SYS_SELECT_H_
 #define _SYS_SELECT_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdint.h>
 #include <stddef.h>
 #include <netdb.h>
 #include <sys/time.h>
 #include <sys/types.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
 		   struct timeval *timeout);

@@ -63,13 +63,13 @@
 #ifndef _SYS_SOCKET_H_
 #define _SYS_SOCKET_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdint.h>
 #include <stddef.h>
 #include <sys/types.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef uint8_t sa_family_t;
 typedef uint32_t socklen_t;
