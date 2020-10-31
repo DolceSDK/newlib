@@ -26,7 +26,7 @@ DEALINGS IN THE SOFTWARE.
 #include <sys/time.h>
 #include <errno.h>
 
-#include <psp2/net/net.h>
+#include <psp2/net.h>
 #include <psp2/types.h>
 
 #include "vitadescriptor.h"

@@ -24,7 +24,7 @@ DEALINGS IN THE SOFTWARE.
 */
 #include <errno.h>
 
-#include <psp2/net/net.h>
+#include <psp2/net.h>
 
 #include "vitaerror.h"
 

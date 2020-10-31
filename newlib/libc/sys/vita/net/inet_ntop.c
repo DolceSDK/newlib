@@ -25,7 +25,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <psp2/net/net.h>
+#include <psp2/net.h>
 
 #define SPRINTF(x) ((socklen_t) sprintf x)
 

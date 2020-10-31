@@ -2,7 +2,7 @@
 #include <string.h>
 #include <netdb.h>
 #include <errno.h>
-#include <psp2/net/net.h>
+#include <psp2/net.h>
 
 #define SCE_ERRNO_MASK 0xFF
 #define MAX_NAME 512

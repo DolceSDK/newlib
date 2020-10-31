@@ -31,7 +31,7 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <psp2/net/net.h>
+#include <psp2/net.h>
 
 #define IPPROTO_IP		SCE_NET_IPPROTO_IP
 #define IPPROTO_ICMP		SCE_NET_IPPROTO_ICMP

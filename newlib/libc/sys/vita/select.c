@@ -28,7 +28,7 @@ DEALINGS IN THE SOFTWARE.
 #include <errno.h>
 
 #include <psp2/kernel/threadmgr.h>
-#include <psp2/net/net.h>
+#include <psp2/net.h>
 #include <psp2/types.h>
 
 #include "vitadescriptor.h"

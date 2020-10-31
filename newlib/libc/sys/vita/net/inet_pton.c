@@ -25,7 +25,7 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <sys/types.h>
-#include <psp2/net/net.h>
+#include <psp2/net.h>
 
 #define inet_pton4(src, dst) sceNetInetPton(AF_INET, src, dst)
 
