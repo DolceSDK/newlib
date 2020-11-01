@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 #include <stddef.h>
+#include <sys/reent.h>
 #include <psp2/kernel/threadmgr.h>
 
 static SceKernelLwMutexWork _newlib_malloc_mutex;

@@ -47,6 +47,7 @@ SOFTWARE.
 #include "vitaglue.h"
 #include "vitaerror.h"
 
+void _free_vita_newlib(void);
 
 // TODO: add to SDK
 int sceKernelLibcGettimeofday(struct timeval *ptimeval, void *ptimezone);

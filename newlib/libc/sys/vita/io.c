@@ -35,6 +35,8 @@ SOFTWARE.
 #include "vitadescriptor.h"
 #include "vitaglue.h"
 
+extern _VOID _EXFUN(__sinit, (struct _reent *));
+
 #define CHECK_STD_INIT(ptr) do { \
 	struct _reent *_check_init_ptr = (ptr); \
 	if (_check_init_ptr && !_check_init_ptr->__sdidinit) \

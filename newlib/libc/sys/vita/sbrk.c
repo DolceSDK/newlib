@@ -44,7 +44,7 @@ void * _sbrk_r(struct _reent *reent, ptrdiff_t incr) {
 		sceKernelUnlockLwMutex(&_newlib_sbrk_mutex, 1);
 fail:
 		reent->_errno = ENOMEM;
-		return -1;
+		return (void*)-1;
 	}
 
 	char *prev_heap_end = _newlib_heap_cur;
@@ -78,7 +78,7 @@ void _init_vita_heap(void) {
 	if (_newlib_heap_memblock < 0) {
 		goto failure;
 	}
-	if (sceKernelGetMemBlockBase(_newlib_heap_memblock, &_newlib_heap_base) < 0) {
+	if (sceKernelGetMemBlockBase(_newlib_heap_memblock, (void**)&_newlib_heap_base) < 0) {
 		goto failure;
 	}
 	_newlib_heap_end = _newlib_heap_base + _newlib_heap_size;

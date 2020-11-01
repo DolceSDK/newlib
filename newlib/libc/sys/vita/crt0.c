@@ -28,11 +28,21 @@ SOFTWARE.
 
 #include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* The maximum number of arguments that can be passed to main(). */
 #define ARGC_MAX 19
 
 int main(int argc, const char* argv[]);
+void _init_vita_heap(void);
+void _free_vita_heap(void);
+void _init_vita_reent(void);
+void _free_vita_reent(void);
+void _init_vita_malloc(void);
+void _free_vita_malloc(void);
+void _init_vita_io(void);
+void _free_vita_io(void);
+void __libc_init_array(void);
 
 void _init_vita_newlib(void) {
 	_init_vita_heap();
@@ -53,12 +63,12 @@ void _free_vita_newlib(void) {
  * Copyright (c) 2005 Marcus R. Brown <mrbrown@ocgnet.org>
  */
 
-void _start(unsigned int args, void *argp)
+void _start(unsigned int args, const void *argp)
 {
-	char *argv[ARGC_MAX + 1] = {""}; // Program name
+	const char *argv[ARGC_MAX + 1] = {""}; // Program name
 	int argc = 1;
 	int loc = 0;
-	char *ptr = argp;
+	const char *ptr = argp;
 
 	/* Turn our thread arguments into main()'s argc and argv[]. */
 	while(loc < args)
